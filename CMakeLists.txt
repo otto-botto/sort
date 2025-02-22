@@ -1,8 +1,41 @@
+#Before adding gtest
 cmake_minimum_required(VERSION 3.29)
-project(sort C)
+project(sort)
 
-set(CMAKE_C_STANDARD 11)
+# Allow the project to work with c and c++.
+file(GLOB csources "${PROJECT_SOURCE_DIR}/*.[ch]")
+set_property(SOURCE ${csources} PROPERTY CMAKE_C_STANDARD 11)
+file(GLOB cppsources "${PROJECT_SOURCE_DIR}/*.cc")
+set_property(SOURCE ${cppsources} PROPERTY CMAKE_CXX_STANDARD 14)
+set_property(SOURCE ${cppsources} PROPERTY CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_executable(sort files_server.c
-        server.c
-        cJSON.c)
+# Set up GoogleTest
+include(FetchContent)
+FetchContent_Declare(
+        googletest
+        URL https://github.com/google/googletest/archive/refs/tags/v1.16.0.zip
+)
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(googletest)
+enable_testing()
+
+# Each library looks like this.
+add_library(otto "otto.c" "otto.h")
+add_executable(otto_test "otto_test.cc")
+target_link_libraries(otto_test GTest::gtest_main otto)
+
+#add_library(server "server.c" "server.h")
+#
+#add_library(cJSON "cJSON.c" "cJSON.h"
+#        files_server_test.cc)
+#
+#add_library(files_server "files_server.c" "files_server.h")
+#target_link_libraries(files_server server cJSON)
+#
+#add_executable(files_server_test "files_server_test.cc")
+#target_link_libraries(files_server_test gtest_main files_server)
+
+#add_executable(sort files_server.c
+#        server.c
+#        cJSON.c
+#        otto.c)

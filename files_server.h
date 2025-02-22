@@ -16,6 +16,7 @@ void sort(Server server, Request request);
 // int sort_number();
 void delete_file(Server server, Request request);
 
+int test_gtest();
 
 
 #endif //FILES_SERVER_H
