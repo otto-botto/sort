@@ -2,12 +2,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <dirent.h>
 #include "cJSON.h"
 #include "server.h"
 #include "files_server.h"
 
 #define DIRECTORY "/home/lora/Documents/server"
+
+int test_gtest() {
+    return 5;
+}
 
 void sort_numbers(int* array, int array_len) {
     for(int i = 1; i < array_len; i++) {
@@ -23,7 +26,6 @@ void sort_numbers(int* array, int array_len) {
 }
 
 void parse(const char* body) {
-
     cJSON* body_json = cJSON_Parse(body);
     if (body_json == NULL) {
         fprintf(stderr, "Failed to parse JSON\n");
@@ -83,8 +85,6 @@ end:
     cJSON_Delete(body_json);
 }
 
-
-
 void sort(Server server, Request request) {
     parse(request.content);
 
@@ -93,21 +93,3 @@ void sort(Server server, Request request) {
 }
 
 
-int main(int argc, char* argv[]) {
-    Server server = create_server(5527);
-    while (1) {
-        Request request = next_request(&server);
-        switch(request.method) {
-            case GET:
-                break;
-            case POST:
-                sort(server, request);
-                break;
-            case DELETE:
-                break;
-            default:
-                fprintf(stderr, "request method not understood");
-        }
-    }
-    return 0;
-}
