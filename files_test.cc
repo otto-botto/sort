@@ -60,3 +60,14 @@ TEST(TestStrSort, SortStrTwo) {
     EXPECT_EQ("manhood", strings[2]);
     EXPECT_EQ("otto", strings[3]);
 }
+
+TEST(TestStrSort, SortDates) {
+    char* strings[] = {"1986-04-19", "1986-04-15", "2004-11-23", "2024-12-31"};
+
+    sort_alpha(strings, 4);
+
+    EXPECT_EQ("1986-04-15", strings[0]);
+    EXPECT_EQ("1986-04-19", strings[1]);
+    EXPECT_EQ("2004-11-23", strings[2]);
+    EXPECT_EQ("2024-12-31", strings[3]);
+}
