@@ -5,7 +5,6 @@
 #include "cJSON.h"
 #include "server.h"
 #include "files_server.h"
-
 #define DIRECTORY "/home/lora/Documents/server"
 
 int test_gtest() {
@@ -22,8 +21,21 @@ void sort_numbers(int* array, int array_len) {
             j --;
         }
     }
-
 }
+
+void sort_alpha(char** array, int array_len) {
+    for(int i = 1; i < array_len; i++) {
+        int j = i ;
+        while((strcmp(array[j - 1], array[j])>0) && j > 0) {
+            char* temp = array[j - 1];
+            array[j - 1] = array[j];
+            array[j] = temp;
+            j--;
+        }
+    }
+}
+
+
 
 void parse(const char* body) {
     cJSON* body_json = cJSON_Parse(body);
@@ -68,11 +80,13 @@ void parse(const char* body) {
     }
 
     if(strcmp("ALPHA", sort_type) == 0) {
-        char* array = (char*)malloc(array_len * sizeof(char));
+        // char* array = (char*)malloc(array_len * sizeof(char));
+        return;
     }
 
     if(strcmp("CHRONO", sort_type) == 0) {
-        char* array = (char*)malloc(array_len * sizeof(char));
+        // char* array = (char*)malloc(array_len * sizeof(char));
+        return;
     }
 
     else {

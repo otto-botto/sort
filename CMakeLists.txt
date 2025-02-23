@@ -1,4 +1,3 @@
-#Before adding gtest
 cmake_minimum_required(VERSION 3.29)
 project(sort)
 
@@ -38,23 +37,3 @@ add_executable(main "main.c")
 target_link_libraries(main server files_server cjson )
 
 
-
-
-
-
-
-#add_library(server "server.c" "server.h")
-#
-#add_library(cJSON "cJSON.c" "cJSON.h"
-#        files_server_test.cc)
-#
-#add_library(files_server "files_server.c" "files_server.h")
-#target_link_libraries(files_server server cJSON)
-#
-#add_executable(files_server_test "files_server_test.cc")
-#target_link_libraries(files_server_test gtest_main files_server)
-
-#add_executable(sort files_server.c
-#        server.c
-#        cJSON.c
-#        otto.c)
