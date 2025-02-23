@@ -73,3 +73,38 @@ TEST(TestStrSort, SortDates) {
     EXPECT_EQ("2024-12-31", strings[3]);
 }
 
+TEST(TestParsing, TestMakeNullTermString) {
+    char** array = (char**)malloc(4 * sizeof(char*));
+    array[0] = make_null_term_string(4);
+    array[1] = make_null_term_string(5);
+    array[2] = make_null_term_string(3);
+    array[3] = make_null_term_string(7);
+    EXPECT_EQ(array[0][4], '\0');
+    EXPECT_EQ(array[1][5], '\0');
+    EXPECT_EQ(array[2][3], '\0');
+    EXPECT_EQ(array[3][7], '\0');
+
+    free(array[0]);
+    free(array);
+}
+
+TEST(TestParsing, TestCopyToNullTerm) {
+    char** array = (char**)malloc(4 * sizeof(char*));
+    array[0] = make_null_term_string(4);
+    array[1] = make_null_term_string(5);
+    array[2] = make_null_term_string(3);
+    array[3] = make_null_term_string(7);
+    strncpy(array[0], "otto", 3);
+    strncpy(array[1], "botto", 4);
+    strncpy(array[2], "cat", 2);
+    strncpy(array[3], "kitties", 6);
+    EXPECT_EQ(array[0][0], 'o');
+    EXPECT_EQ(array[0][1], 't');
+    EXPECT_EQ(array[0][4], '\0');
+    EXPECT_EQ(array[1][5], '\0');
+    EXPECT_EQ(array[2][3], '\0');
+    EXPECT_EQ(array[3][7], '\0');
+
+    free(array[0]);
+    free(array);
+}

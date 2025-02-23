@@ -26,7 +26,7 @@ void sort_numbers(int* array, int array_len) {
 void sort_alpha(char** array, int array_len) {
     for(int i = 1; i < array_len; i++) {
         int j = i ;
-        while((strcmp(array[j - 1], array[j])>0) && j > 0) {
+        while(j> 0 && (strcmp(array[j - 1], array[j])>0)) {
             char* temp = array[j - 1];
             array[j - 1] = array[j];
             array[j] = temp;
@@ -34,6 +34,13 @@ void sort_alpha(char** array, int array_len) {
         }
     }
 }
+
+char* make_null_term_string(int length) {
+    char* string = (char*)malloc((length + 1)*sizeof(char));
+    string[length] = '\0';
+    return string;
+}
+
 
 char** parse_strings(const cJSON* items, int array_len) {
     // allocate memory for char** array
@@ -51,7 +58,10 @@ char** parse_strings(const cJSON* items, int array_len) {
         if (!cJSON_IsString(item)) {
             fprintf(stderr, "Failed to parse JSON\n");
         }
-        array[i] = item->valuestring;
+        int string_len = strlen(item->valuestring);
+        array[i] = make_null_term_string(string_len);
+        char* source = item->valuestring;
+        strncpy(array[i], source, string_len);
     }
     return array;
 }
@@ -100,8 +110,12 @@ void parse(const char* body) {
 
     if(strcmp("ALPHA", sort_type) == 0 || strcmp("CHRONO", sort_type) == 0) {
         char** array = parse_strings(items, array_len);
+
         //call sort_strings
         sort_alpha(array, array_len);
+        for(int i = 0; i < array_len; i++) {
+            free(array[i]);
+        }
         free(array);
         goto end;
     }
