@@ -14,7 +14,7 @@ int test_gtest() {
 void sort_numbers(int* array, int array_len) {
     for(int i = 1; i < array_len; i++) {
         int j = i;
-        while(array[j-1] > array[j] && j > 0) {
+        while(j > 0 && array[j-1] > array[j]) {
             int temp = array[j-1];
             array[j - 1] = array[j];
             array[j] = temp;
@@ -66,6 +66,27 @@ char** parse_strings(const cJSON* items, int array_len) {
     return array;
 }
 
+int* parse_integers(const cJSON* items, int array_len) {
+    // allocate memory for int* array
+    int* array = (int*)malloc(array_len * sizeof(int));
+    if (array == NULL) {
+        fprintf(stderr, "Failed to allocate memory for array\n");
+        exit(EXIT_FAILURE);
+    }
+    //place the values in the array
+    for(int i =0; i < array_len; i++) {
+        cJSON* item = cJSON_GetArrayItem(items, i);
+        if (item == NULL) {
+            fprintf(stderr, "Failed to parse JSON\n");
+        }
+        if (!cJSON_IsNumber(item)) {
+            fprintf(stderr, "Failed to parse JSON\n");
+        }
+        array[i] = item->valueint;
+    }
+    return array;
+}
+
 void parse(const char* body) {
     cJSON* body_json = cJSON_Parse(body);
     if (body_json == NULL) {
@@ -82,23 +103,7 @@ void parse(const char* body) {
     char* sort_type = type->valuestring;
 
     if(strcmp("NUMBER", sort_type) == 0){
-        // allocate an array of integers
-        int* array = (int*)malloc(array_len * sizeof(int));
-        if (array == NULL) {
-            fprintf(stderr, "Failed to allocate memory for array\n");
-            exit(EXIT_FAILURE);
-        }
-        //place the values in the array
-        for(int i =0; i < array_len; i++) {
-            cJSON* item = cJSON_GetArrayItem(items, i);
-            if (item == NULL) {
-                fprintf(stderr, "Failed to parse JSON\n");
-            }
-            if (!cJSON_IsNumber(item)) {
-                fprintf(stderr, "Failed to parse JSON\n");
-            }
-            array[i] = item->valueint;
-        }
+        int* array = parse_integers(items, array_len);
         // call sort_numbers
         sort_numbers(array, array_len);
         for(int i = 0; i < array_len; i++) {
@@ -110,7 +115,6 @@ void parse(const char* body) {
 
     if(strcmp("ALPHA", sort_type) == 0 || strcmp("CHRONO", sort_type) == 0) {
         char** array = parse_strings(items, array_len);
-
         //call sort_strings
         sort_alpha(array, array_len);
         for(int i = 0; i < array_len; i++) {

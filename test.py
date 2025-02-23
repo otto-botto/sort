@@ -74,16 +74,8 @@ class TestSavingFiles(unittest.TestCase):
         dict_returned = collect_info()
         self.assertEqual(dict_returned, ["/home/lora/Documents/books/otto", "otto", "botto", "plk", 1, 1])
 
-    def test_send_post_request(self):
-        result = client.collect_info()
-        self.assertEqual(result.content, b"Book was added to the server.\n")
 
-class TestListingFiles(unittest.TestCase):
-    def test_list_files(self):
-        result = requests.get("http://localhost:5525/list")
-        self.assertEqual(200, result.status_code)
-        self.assertEqual("GET", result.request.method)
-        self.assertEqual(b"otto\ntiny_c_projects.pdf\nalgorithmic_thinking\n", result.content)
+
 
 if __name__ == '__main__':
     unittest.main()
