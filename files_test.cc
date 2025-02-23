@@ -2,6 +2,7 @@
 
 extern "C" {
 #include "files_server.h"
+#include "cJSON.h"
 }
 
 TEST(FirstTest, IntegerTest) {
@@ -71,3 +72,4 @@ TEST(TestStrSort, SortDates) {
     EXPECT_EQ("2004-11-23", strings[2]);
     EXPECT_EQ("2024-12-31", strings[3]);
 }
+

@@ -59,6 +59,16 @@ class TestSavingFiles(unittest.TestCase):
         self.assertEqual(result.request.method, "POST")
         self.assertEqual(result.content, b"Request successfully sent.\n")
 
+    def test_send_json_dates(self):
+        result = requests.post("http://localhost:5527",
+                               json={
+                                   "type": "CHRONO",
+                                   "items": ["1986-04-19", "1986-04-15", "2004-11-23", "2024-12-31"]
+                               })
+        self.assertEqual(200, result.status_code)
+        self.assertEqual(result.request.method, "POST")
+        self.assertEqual(result.content, b"Request successfully sent.\n")
+
 
     def test_collect_info(self):
         dict_returned = collect_info()

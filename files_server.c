@@ -35,7 +35,26 @@ void sort_alpha(char** array, int array_len) {
     }
 }
 
-
+char** parse_strings(const cJSON* items, int array_len) {
+    // allocate memory for char** array
+    char** array = (char**)malloc(array_len * sizeof(char*));
+    if(array == NULL) {
+        fprintf(stderr, "Failed to allocate memory for array\n");
+        exit(EXIT_FAILURE);
+    }
+    //place the values in the array
+    for(int i =0; i < array_len; i++) {
+        cJSON* item = cJSON_GetArrayItem(items, i);
+        if (item == NULL) {
+            fprintf(stderr, "Failed to parse JSON\n");
+        }
+        if (!cJSON_IsString(item)) {
+            fprintf(stderr, "Failed to parse JSON\n");
+        }
+        array[i] = item->valuestring;
+    }
+    return array;
+}
 
 void parse(const char* body) {
     cJSON* body_json = cJSON_Parse(body);
@@ -79,15 +98,14 @@ void parse(const char* body) {
         goto end;
     }
 
-    if(strcmp("ALPHA", sort_type) == 0) {
-        // char* array = (char*)malloc(array_len * sizeof(char));
-        return;
+    if(strcmp("ALPHA", sort_type) == 0 || strcmp("CHRONO", sort_type) == 0) {
+        char** array = parse_strings(items, array_len);
+        //call sort_strings
+        sort_alpha(array, array_len);
+        free(array);
+        goto end;
     }
 
-    if(strcmp("CHRONO", sort_type) == 0) {
-        // char* array = (char*)malloc(array_len * sizeof(char));
-        return;
-    }
 
     else {
         fprintf(stderr, "sorting type not understood");
