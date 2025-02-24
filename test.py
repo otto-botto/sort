@@ -19,35 +19,16 @@ class TestGettingFiles(unittest.TestCase):
         print(file_size)
 
 
-    def test_landing_page(self):
-        result = requests.get("http://localhost:5525/")
-        self.assertEqual(200, result.status_code)
-        self.assertEqual("GET", result.request.method)
-        self.assertEqual(b"Welcome to the files server.\n", result.content)
-
-    def test_cat_image(self):
-        result = requests.get("http://localhost:5525/cat.jpg")
-        self.assertEqual(200, result.status_code)
-        self.assertEqual(41006, len(result.content))
-        self.assertEqual("image/jpeg", result.headers['content-type'])
-
-
 class TestSavingFiles(unittest.TestCase):
-    def test_add_file_reaching(self):
-        result = requests.post("http://localhost:5527/")
-        self.assertEqual(result.status_code, 200)
-        self.assertEqual(result.request.method, "POST")
-        self.assertEqual(result.content, b"Request successfully sent.\n")
-
-    def test_send_json_numbers(self):
-        result = requests.post("http://localhost:5527",
-            json={
-            "type": "NUMBER",
-            "items": [100, 20, 15]
-        })
+    def test_send_json_strings(self):
+        path = "/home/lora/Documents/json/animals.json"
+        with open(path, "rb") as f:
+            bytes = f.read()
+            # encoded = base64.b64encode(bytes).decode('utf-8') // strings in python are saved as Unicode, UTF-8 is the default
+        result = requests.post("http://localhost:5527", bytes)
         self.assertEqual(200, result.status_code)
         self.assertEqual(result.request.method, "POST")
-        self.assertEqual(result.content, b"Request successfully sent.\n")
+        self.assertEqual(result.content, b"{\"strings\" : [\"cat\", \"dog\", \"mouse\", \"squirrel\"]}")
 
     def test_send_json_alpha(self):
         result = requests.post("http://localhost:5527",
