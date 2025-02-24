@@ -6,8 +6,11 @@ import requests
 
 
 def main():
-
+    resultGet = requests.get("http://localhost:5527")
+    if resultGet.status_code == 200:
+        print("Connected to sorting server.")
     while(True):
+
         command = input("To send a file to be sorted, type <send>. To quit, type <quit>: ")
 
         if command == "quit":

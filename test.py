@@ -4,7 +4,6 @@ import client
 import requests
 import os
 
-from client import collect_info
 
 
 class TestGettingFiles(unittest.TestCase):
