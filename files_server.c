@@ -41,7 +41,6 @@ char* make_null_term_string(int length) {
     return string;
 }
 
-
 char** parse_strings(const cJSON* items, int array_len) {
     // allocate memory for char** array
     char** array = (char**)malloc(array_len * sizeof(char*));
@@ -87,7 +86,33 @@ int* parse_integers(const cJSON* items, int array_len) {
     return array;
 }
 
-void parse(const char* body) {
+char* build_str_from_int_arr(int* arr, int size) {
+    int max_digits = 10;
+    int buffer_size = size * (max_digits + 1) + 1;
+    char* str = (char*)malloc(buffer_size * sizeof(char));
+    str[0] = '\0';
+    strcat(str, "{\"numbers\" : [");
+
+    for(int i=0; i < size; i++) {
+        // if(i == 0) {
+        //     strcat(str, "{");
+        // }
+
+        char temp[max_digits + 1];
+        sprintf(temp, "%d", arr[i]);
+        strcat(str, temp);
+        if(i < size - 1) {
+            strcat(str, ", ");
+        } else if(i == size - 1) {
+            strcat(str, "]}");
+        }
+    }
+    return str;
+}
+
+char* parse(const char* body) {
+
+    // get the request body
     cJSON* body_json = cJSON_Parse(body);
     if (body_json == NULL) {
         fprintf(stderr, "Failed to parse JSON\n");
@@ -104,13 +129,11 @@ void parse(const char* body) {
 
     if(strcmp("NUMBER", sort_type) == 0){
         int* array = parse_integers(items, array_len);
-        // call sort_numbers
         sort_numbers(array, array_len);
-        for(int i = 0; i < array_len; i++) {
-            printf("%d\n", array[i]);
-        }
-        free(array);
-        goto end;
+        cJSON_Delete(body_json);
+        char* response = build_str_from_int_arr(array, array_len);
+        return response;
+
     }
 
     if(strcmp("ALPHA", sort_type) == 0 || strcmp("CHRONO", sort_type) == 0) {
@@ -121,7 +144,7 @@ void parse(const char* body) {
             free(array[i]);
         }
         free(array);
-        goto end;
+
     }
 
 
@@ -129,16 +152,12 @@ void parse(const char* body) {
         fprintf(stderr, "sorting type not understood");
         exit(EXIT_FAILURE);
     }
-
-
-end:
-    cJSON_Delete(body_json);
 }
 
 void sort(Server server, Request request) {
-    parse(request.content);
 
-    char* message = "Request successfully sent.\n";
+
+    char* message = parse(request.content);
     respond(&server, &request, 200, message);
 }
 
