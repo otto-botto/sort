@@ -94,16 +94,32 @@ char* build_str_from_int_arr(int* arr, int size) {
     strcat(str, "{\"numbers\" : [");
 
     for(int i=0; i < size; i++) {
-        // if(i == 0) {
-        //     strcat(str, "{");
-        // }
-
         char temp[max_digits + 1];
         sprintf(temp, "%d", arr[i]);
         strcat(str, temp);
         if(i < size - 1) {
             strcat(str, ", ");
         } else if(i == size - 1) {
+            strcat(str, "]}");
+        }
+    }
+    return str;
+}
+
+char* build_str_from_str(char** arr, int size) {
+    int max_characters = 100;
+    int buffer_size = size * (max_characters + 1) + 1;
+    char* str = (char*)malloc(buffer_size * sizeof(char));
+    str[0] = '\0';
+    strcat(str, "{\"strings\" : [");
+
+    for(int i=0; i < size; i++) {
+        char temp[max_characters + 1];
+        sprintf(temp, "\"%s\"", arr[i]);
+        strcat(str, temp);
+        if(i < size - 1) {
+            strcat(str, ", ");
+        }else if(i == size - 1) {
             strcat(str, "]}");
         }
     }
@@ -140,11 +156,9 @@ char* parse(const char* body) {
         char** array = parse_strings(items, array_len);
         //call sort_strings
         sort_alpha(array, array_len);
-        for(int i = 0; i < array_len; i++) {
-            free(array[i]);
-        }
-        free(array);
-
+        cJSON_Delete(body_json);
+        char* response = build_str_from_str(array, array_len);
+        return response;
     }
 
 
@@ -155,10 +169,9 @@ char* parse(const char* body) {
 }
 
 void sort(Server server, Request request) {
-
-
     char* message = parse(request.content);
     respond(&server, &request, 200, message);
+    free(message);
 }
 
 

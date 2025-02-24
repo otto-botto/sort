@@ -53,11 +53,11 @@ class TestSavingFiles(unittest.TestCase):
         result = requests.post("http://localhost:5527",
            json={
                "type": "ALPHA",
-               "items": ["cat", "dog", "mouse"]
+               "items": ["squirrel", "dog","cat", "mouse"]
            })
         self.assertEqual(200, result.status_code)
         self.assertEqual(result.request.method, "POST")
-        self.assertEqual(result.content, b"Request successfully sent.\n")
+        self.assertEqual(result.content, b"{\"strings\" : [\"cat\", \"dog\", \"mouse\", \"squirrel\"]}")
 
     def test_send_json_dates(self):
         result = requests.post("http://localhost:5527",
@@ -67,12 +67,8 @@ class TestSavingFiles(unittest.TestCase):
                                })
         self.assertEqual(200, result.status_code)
         self.assertEqual(result.request.method, "POST")
-        self.assertEqual(result.content, b"Request successfully sent.\n")
-
-
-    def test_collect_info(self):
-        dict_returned = collect_info()
-        self.assertEqual(dict_returned, ["/home/lora/Documents/books/otto", "otto", "botto", "plk", 1, 1])
+        self.assertEqual(result.content, b"{\"strings\" : [\"1986-04-15\", \"1986-04-19\", \"2004-11-23\""
+                                         b", \"2024-12-31\"]}")
 
 
 
