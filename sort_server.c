@@ -5,7 +5,7 @@
 #include "cJSON.h"
 #include "server.h"
 #include "files_server.h"
-#define DIRECTORY "/home/lora/Documents/server"
+
 
 int test_gtest() {
     return 5;
