@@ -1,12 +1,18 @@
 import base64
-from http.client import responses
-
+# from http.client import responses
+import requests
+import os
 import requests
 
 
 def main():
 
     while(True):
+        command = input("To send a file to be sorted, type <send>. To quit, type <quit>: ")
+
+        if command == "quit":
+            break
+
         path = input("Enter json file absolute path: ")
 
         if path == None:
@@ -21,7 +27,7 @@ def main():
                     print(result.content)
                     continue
 
-        except ValueError:
+        except FileNotFoundError:
             print("Path not recognized.\n")
 
 
