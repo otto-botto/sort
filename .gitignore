@@ -1,3 +1,7 @@
 __pycache__
 cmake-build-debug
 .idea
+otto.c
+otto.h
+sort_request_uml.png
+detailed_uml.png
