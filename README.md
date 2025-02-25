@@ -43,12 +43,14 @@ Note that cJSON is written in ANSI C (C89)to maximize scope, while sort_server i
 Below are a few examples of use cases. In each case, the microservice must first be built and compiled. 
 Then you can start the service by specifying the port you want to listen on (in this case 5527):
 ``` c
+// in main.c
 int main(int argc, char* argv[]) {
     Server server = create_server(5527);
     ...
 ```
 Before sending any POST requests, make sure you have connected to the server:
 ```python
+# in a sample client.py file
 def main():
     resultGet = requests.get("http://localhost:5527")
     if resultGet.status_code == 200:
@@ -56,13 +58,14 @@ def main():
 ```
 Also make sure that you have a way of quitting the server when you're done:
 ```python
+# in a sample client.py file
     while(True):
       command = input("To send a file to be sorted, type <send>. To quit, type <quit>: ")
       if command == "quit":
         break
 ```
 #### Send a request to sort numerically
-Say we have a file names <restaurant_id.json> in the following json format:
+Say we have a file named <restaurant_id.json> in the following json format:
 ```json
 {
     "type": "NUMBER",
@@ -72,7 +75,8 @@ Say we have a file names <restaurant_id.json> in the following json format:
 
 you can make a POST request and add the json to the body of the request. In python, the request may look like this:
 ```python
-//create a request to sort numbers (integers) by giving the path of the json file
+# in a sample client.py file
+# create a request to sort numbers (integers) by giving the path of the json file
     path = input("Enter json file absolute path: ")
     try:
       with open(path, "rb") as f:
@@ -87,7 +91,7 @@ you can make a POST request and add the json to the body of the request. In pyth
 ```
 Here the client example prints the results to standard out, and you can redirect the results to be saved to a specific json file. 
 #### Send a request to sort alphabetically
-Say we have a file names <restaurant_name.json> in the following json format:
+Say we have a file named <restaurant_name.json> in the following json format:
 ```json
 {
     "type": "ALPHA",
