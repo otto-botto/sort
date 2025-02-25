@@ -28,7 +28,7 @@ add_library(otto "otto.c" "otto.h")
 add_executable(otto_test "otto_test.cc")
 target_link_libraries(otto_test GTest::gtest_main otto)
 
-add_library(files_server "sort_server.c" "files_server.h")
+add_library(files_server "sort_server.c" "sort_server.h")
 add_executable(files_test "files_test.cc")
 target_link_libraries(files_test GTest::gtest_main files_server server cjson)
 

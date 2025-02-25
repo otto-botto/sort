@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "server.h"
-#include "files_server.h"
+#include "sort_server.h"
 
 int main(int argc, char* argv[]) {
     Server server = create_server(5527);
