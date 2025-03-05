@@ -24,11 +24,14 @@ def main():
         try:
             with open(path, "rb") as f:
                 bytes = f.read()
+                print("Sending bytes: ")
+                print(bytes)
             # encoded = base64.b64encode(bytes).decode('utf-8') // strings in python are saved as Unicode, UTF-8 is the default
             result = requests.post("http://localhost:5527", bytes)
             if result.status_code == 200:
-                    print(result.content)
-                    continue
+                print("received bytes: ")
+                print(result.content)
+                continue
 
         except FileNotFoundError:
             print("Path not recognized.\n")

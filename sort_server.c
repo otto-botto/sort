@@ -170,6 +170,7 @@ char* parse(const char* body) {
 
 void sort(Server server, Request request) {
     char* message = parse(request.content);
+    printf("%s\n", message);
     respond(&server, &request, 200, message);
     free(message);
 }

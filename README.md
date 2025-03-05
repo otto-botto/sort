@@ -46,8 +46,27 @@ Then you can start the service by specifying the port you want to listen on (in 
 // in main.c
 int main(int argc, char* argv[]) {
     Server server = create_server(5527);
-    ...
+    while (1) {
+        Request request = next_request(&server);
+        switch(request.method) {
+            case GET:
+                char* message = "HTTP/1.1 200 OK\r\n";
+                respond(&server, &request, 200, message);
+                break;
+            case POST:
+                sort(server, request);
+                break;
+            default:
+                fprintf(stderr, "request method not understood");
+        }
+    }
+    return 0;
+}
 ```
+The server is an infinite loop, which listens for an HTTP request. 
+For a GET request, the server lets you know you have connected. For a POST request, 
+the server calls the sort() function, which parses the body of the requests and sorts
+the array in the request's body (which is why it is crucial the body contains JSON).
 Before sending any POST requests, make sure you have connected to the server:
 ```python
 # in a sample client.py file
