@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include "server.h"
 #include "sort_server.h"
 
@@ -12,7 +13,10 @@ int main(int argc, char* argv[]) {
                 respond(&server, &request, 200, message);
                 break;
             case POST:
-                sort(server, request);
+                if(strcmp(request.path, "/sort") == 0) {
+                    sort(server, request);
+                }
+
                 break;
             default:
                 fprintf(stderr, "request method not understood");

@@ -42,7 +42,7 @@ Note that cJSON is written in ANSI C (C89)to maximize scope, while sort_server i
 ### Examples
 Below are a few examples of use cases. In each case, the microservice must first be built and compiled. 
 Then you can start the service by specifying the port you want to listen on (in this case 5527):
-``` c
+```c
 // in main.c
 int main(int argc, char* argv[]) {
     Server server = create_server(5527);
